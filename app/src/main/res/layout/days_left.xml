@@ -8,6 +8,7 @@
         android:id="@+id/contentFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#CCCCCC"
         android:padding="3dp">
 
         <TextView
@@ -17,19 +18,18 @@
             android:paddingTop="4dp"
             android:text="Days"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textColor="#66FFFF"
             android:textSize="25sp"/>
 
         <TextView
             android:id="@+id/counterTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginBottom="-14dp"
             android:paddingBottom="0dp"
             android:layout_gravity="bottom"
             android:text="11"
-            android:textColor="#5a5a5a"
+            android:textColor="#66FFFF"
             android:textSize="95sp" />
 
     </FrameLayout>

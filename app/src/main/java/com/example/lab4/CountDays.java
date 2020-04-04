@@ -77,16 +77,27 @@ public class CountDays extends AppWidgetProvider {
                     timeInMilliseconds = mDate.getTime();
                 } catch (ParseException e) {
                     e.printStackTrace();
+                }
+                // Calculate the difference in days between now and event date
+                double diffInDays = (double) (timeInMilliseconds - calendar.getTimeInMillis()) / DAY_OF_MONTH;
+                int daysLeftCeil = (int) Math.ceil(diffInDays);
+                views.setTextViewText(R.id.counterTv, String.valueOf(Math.max(0, daysLeftCeil)));
+                if (daysLeftCeil == 0) {
+                    scheduleAlarm(context, appWidgetId);
+                    views.setTextViewText(R.id.counterTv, "0");
+                } else if (diffInDays > 0) {
+                    // Adjust counter text font size according to value
+                    if (diffInDays < 100) {
+                        views.setTextViewTextSize(R.id.counterTv, TypedValue.COMPLEX_UNIT_SP, 95);
+                        views.setViewPadding(R.id.counterTv, 0, 0, 0, 0);
+                    } else {
+                        int bottomMargin = (int) context.getResources().getDimension(R.dimen.counter_text_view_bottom_margin);
+                        views.setTextViewTextSize(R.id.counterTv, TypedValue.COMPLEX_UNIT_SP, 65);
+                        views.setViewPadding(R.id.counterTv, 0, 0, 0, bottomMargin);
+                    }
+
+                }
             }
-            // Calculate the difference in days between now and event date
-            double diffInDays = (double) (timeInMilliseconds - calendar.getTimeInMillis()) / DAY_OF_MONTH;
-            int daysLeftCeil = (int) Math.ceil(diffInDays);
-            views.setTextViewText(R.id.counterTv, String.valueOf(Math.max(0, daysLeftCeil)));
-            if (daysLeftCeil == 0) {
-                scheduleAlarm(context, appWidgetId);
-                views.setTextViewText(R.id.counterTv, "0");
-            }
-        }
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
     private static void scheduleNextUpdate(Context context, int appWidgetId) {
