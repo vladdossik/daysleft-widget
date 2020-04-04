@@ -18,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
-    private static final String PREFS_NAME = "com.sd.lab4.CountdownW";
-    private static final String PREF_PREFIX_KEY = "appwidget";
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private final Calendar mCalendar = Calendar.getInstance();
     private EditText dateTv;
@@ -29,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Configure Widget");
-
         // извлекаем ID конфигурируемого виджета
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -89,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     final Context context = MainActivity.this;
 
                     // When the button is clicked, store the string locally
-                    saveDatePref(context, mAppWidgetId, dateTv.getText().toString(), false, false);
+                    saveDatePref(context, mAppWidgetId, dateTv.getText().toString());
                     // It is the responsibility of the configuration activity to update the app widget
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                     CountDays.updateAppWidget(context, appWidgetManager, mAppWidgetId);
@@ -125,23 +122,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    static void saveDatePref(Context context, int appWidgetId, String text, boolean done, boolean shown) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
-        prefs.putBoolean(PREF_PREFIX_KEY + appWidgetId + "b", done);
-        prefs.putBoolean(PREF_PREFIX_KEY + appWidgetId + "n", shown);
+    static void saveDatePref(Context context, int appWidgetId, String text ) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences("com.example.lab4.CountdownW", 0).edit();
+        prefs.putString("appwidget" + appWidgetId, text);
         prefs.apply();
     }
-    static void deleteDatePref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId);
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId + "b");
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId + "n");
+  /*  static void deleteDatePref(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences("com.example.lab4.CountdownW", 0).edit();
+        prefs.remove("appwidget" + appWidgetId);
         prefs.apply();
-    }
+    }*/
     static String loadDatePref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
+        SharedPreferences prefs = context.getSharedPreferences("com.example.lab4.CountdownW", 0);
+        String titleValue = prefs.getString("appwidget" + appWidgetId, null);
         if (titleValue != null) {
             return titleValue;
         } else {

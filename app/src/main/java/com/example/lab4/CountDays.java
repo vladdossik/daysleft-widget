@@ -23,8 +23,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CountDays extends AppWidgetProvider {
-    public static final String ACTION_SCHEDULED_ALARM ="com.sd.lab4.SCHEDULED_ALARM";
-    private static final String ACTION_SCHEDULED_UPDATE ="com.sd.lab4.SCHEDULED_UPDATE";
     private static final int DAY_OF_MONTH = (24 * 60 * 60 * 1000);
     public static ComponentName getComponentName(Context context) {
         return new ComponentName(context, CountDays.class);
@@ -38,25 +36,25 @@ public class CountDays extends AppWidgetProvider {
                 case Intent.ACTION_TIMEZONE_CHANGED:  // Self Explanatory
                 case Intent.ACTION_TIME_CHANGED:
 
-                case ACTION_SCHEDULED_UPDATE:
+                case "com.example.lab4.SCHEDULED_UPDATE":
                     AppWidgetManager manager = AppWidgetManager.getInstance(context);
                     int[] ids = manager.getAppWidgetIds(getComponentName(context));
                     onUpdate(context, manager, ids);
                     break;
 
-                case ACTION_SCHEDULED_ALARM:
+                case "com.example.lab4.SCHEDULED_ALARM":
                     showNotification(context);
                     break;
             }
         }
         super.onReceive(context,intent);
     }
-    @Override
+   /* @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             MainActivity.deleteDatePref(context, appWidgetId);
         }
-    }
+    }*/
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
@@ -93,7 +91,7 @@ public class CountDays extends AppWidgetProvider {
     }
     private static void scheduleNextUpdate(Context context, int appWidgetId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, CountDays.class).setAction(ACTION_SCHEDULED_UPDATE);
+        Intent intent = new Intent(context, CountDays.class).setAction("com.example.lab4.SCHEDULED_UPDATE");
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         long midnightTime = getTimeTillHour(0) + DAY_OF_MONTH;
@@ -102,7 +100,7 @@ public class CountDays extends AppWidgetProvider {
     }
     private static void scheduleAlarm(Context context, int appWidgetId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, CountDays.class).setAction(ACTION_SCHEDULED_ALARM);
+        Intent intent = new Intent(context, CountDays.class).setAction("com.example.lab4.SCHEDULED_ALARM");
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         alarmManager.cancel(pendingIntent);
