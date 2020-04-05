@@ -25,7 +25,7 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="-14dp"
             android:paddingBottom="0dp"
-            android:text="  11"
+             android:text="  11"
             android:textColor="#66FFFF"
             android:textSize="95sp" />
 

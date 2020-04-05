@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // setTitle("Configure Widget");
+
         // извлекаем ID конфигурируемого виджета
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 showDateDialog(date);
             }
         });
-
         Button applyBtn = findViewById(R.id.applyBtn);
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
