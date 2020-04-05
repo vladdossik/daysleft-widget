@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class    CountDays extends AppWidgetProvider {
+public class CountDays extends AppWidgetProvider {
     private static final int DAY_OF_MONTH = (24 * 60 * 60 * 1000);
     public static ComponentName getComponentName(Context context) {
         return new ComponentName(context, CountDays.class);
@@ -56,34 +56,34 @@ public class    CountDays extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.days_left);
         views.setOnClickPendingIntent(R.id.contentFrame,pendingIntent);
-            Calendar calendar = Calendar.getInstance();
-            String widgetDate = MainActivity.loadDatePref(context, appWidgetId);
-            long timeInMilliseconds = 0;
-            if (!widgetDate.equals("")) {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                try {
-                    Date mDate = sdf.parse(widgetDate);
-                    timeInMilliseconds = mDate.getTime();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                double diffInDays = (double) (timeInMilliseconds - calendar.getTimeInMillis()) ;
-                int daysLeftCeil = (int) Math.ceil(diffInDays);
-                views.setTextViewText(R.id.counterTv, String.valueOf(Math.max(0, daysLeftCeil)));
-                if (daysLeftCeil == 0) {
-                    scheduleAlarm(context, appWidgetId);
-                    views.setTextViewText(R.id.counterTv, "  0");
-                } else if (diffInDays > 0) {
-                    if (diffInDays < 100) {
-                        views.setTextViewTextSize(R.id.counterTv, TypedValue.COMPLEX_UNIT_SP, 95);
-
-                    } else {
-                        int bottomMargin = (int) context.getResources().getDimension(R.dimen.counter_text_view_bottom_margin);
-                        views.setTextViewTextSize(R.id.counterTv, TypedValue.COMPLEX_UNIT_SP, 65);
-                    }
-
-                }
+        Calendar calendar = Calendar.getInstance();
+        String widgetDate = MainActivity.loadDatePref(context, appWidgetId);
+        long timeInMilliseconds = 0;
+        if (!widgetDate.equals("")) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            try {
+                Date mDate = sdf.parse(widgetDate);
+                timeInMilliseconds = mDate.getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            // Формула для нахождения разности между днями
+            double diffInDays = (double) (timeInMilliseconds - calendar.getTimeInMillis()) / DAY_OF_MONTH;
+            int daysLeftCeil = (int) Math.ceil(diffInDays);
+            views.setTextViewText(R.id.counter, String.valueOf(Math.max(0, daysLeftCeil)));
+            if (daysLeftCeil == 0) {
+                scheduleAlarm(context, appWidgetId);
+                views.setTextViewText(R.id.counter, " 0");
+            } else if (diffInDays > 0) {
+                if (diffInDays > 100) {
+                    // Меняем шрифт в зависимоти от размера  числа
+                    views.setTextViewTextSize(R.id.counter, TypedValue.COMPLEX_UNIT_SP, 65);
+                } else if(diffInDays > 9 && diffInDays < 100) {
+                    views.setTextViewTextSize(R.id.counter, TypedValue.COMPLEX_UNIT_SP, 75);
+                }
+
+            }
+        }
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
     private static void scheduleAlarm(Context context, int appWidgetId) {
@@ -92,10 +92,12 @@ public class    CountDays extends AppWidgetProvider {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         alarmManager.cancel(pendingIntent);
+        // Ровно в 9:00 будет показано уведомление
         long alarmTime = getTimeTillHour(9);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
     }
     private static long getTimeTillHour(int hour) {
+        // Ровно в 9:00:00:00
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, 0);
@@ -103,6 +105,7 @@ public class    CountDays extends AppWidgetProvider {
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTimeInMillis();
     }
+    // При достижении определенного времени показывается уведомление в шторке
     private static void showNotification(Context context) {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ID = "alarm_ch_1";

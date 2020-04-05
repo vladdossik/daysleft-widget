@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/configLy"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:padding="16dp"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
     android:orientation="vertical">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Установите дату:" />
+        android:text="Установите дату!"
+        android:layout_marginTop="8dp"/>
 
     <EditText
-        android:id="@+id/dateTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:focusable="false"
-        android:inputType="none"/>
+        android:id="@+id/dateIn"/>
 
     <TextView
-        android:id="@+id/errorTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:visibility="gone"
-        android:textColor="@android:color/holo_red_light"/>
+        android:textColor="@android:color/holo_red_light"
+        android:id="@+id/errorOUT"
+        android:layout_marginBottom="15dp"/>
 
     <Button
-        android:id="@+id/applyBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Сохранить" />
-
+        android:id="@+id/applyBtn"
+        android:text="Сохранить"
+        android:layout_marginTop="8dp"/>
 </LinearLayout>

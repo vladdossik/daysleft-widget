@@ -20,34 +20,28 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private final Calendar mCalendar = Calendar.getInstance();
-    private EditText dateTv;
-    private TextView errorTv;
+    private EditText Date;
+    private TextView error;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // извлекаем ID конфигурируемого виджета
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
-        // формируем intent ответа
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-        // отрицательный ответ
         setResult(RESULT_CANCELED,resultValue);
 
-        //проверяем корректность ID
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID){
             finish();
             return;
         }
-        //Setup UI
-        errorTv = findViewById(R.id.errorTv);
-        dateTv = findViewById(R.id.dateTv);
-        dateTv.setText(loadDatePref(MainActivity.this, mAppWidgetId));
+        error = findViewById(R.id.errorOUT);
+        Date = findViewById(R.id.dateIn);
+        Date.setText(loadDatePref(MainActivity.this, mAppWidgetId));
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -59,12 +53,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        dateTv.setOnClickListener(new View.OnClickListener() {
+        Date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateDialog(date);
             }
         });
+
         Button applyBtn = findViewById(R.id.applyBtn);
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,18 +74,14 @@ public class MainActivity extends AppCompatActivity {
                 today.add(Calendar.DAY_OF_MONTH, 1);
                 if (mCalendar.before(today)) {
 
-                    errorTv.setText("Событие должно быть в будущем!");
-                    errorTv.setVisibility(View.VISIBLE);
+                    error.setText("Событие должно быть в будущем!");
+                    error.setVisibility(View.VISIBLE);
                 }
                 else {
                     final Context context = MainActivity.this;
-
-                    // When the button is clicked, store the string locally
-                    saveDatePref(context, mAppWidgetId, dateTv.getText().toString());
-                    // It is the responsibility of the configuration activity to update the app widget
+                    saveDatePref(context, mAppWidgetId, Date.getText().toString());
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                     CountDays.updateAppWidget(context, appWidgetManager, mAppWidgetId);
-                    // Make sure we pass back the original appWidgetId
                     Intent resultValue = new Intent();
                     resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
                     setResult(RESULT_OK, resultValue);
@@ -108,16 +99,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        dateTv.setText(sdf.format(mCalendar.getTime()));
-        errorTv.setVisibility(View.GONE);
+        Date.setText(sdf.format(mCalendar.getTime()));
+        error.setVisibility(View.GONE);
     }
     private void setCalValue() {
-        if (!dateTv.getText().toString().equals("")) {
+        if (!Date.getText().toString().equals("")) {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             try {
-                mCalendar.setTime(sdf.parse(dateTv.getText().toString()));
+                mCalendar.setTime(sdf.parse(Date.getText().toString()));
             } catch (ParseException e) {
-                // Invalid date in text view
                 e.printStackTrace();
             }
         }
