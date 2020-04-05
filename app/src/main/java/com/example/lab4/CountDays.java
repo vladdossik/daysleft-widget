@@ -31,11 +31,6 @@ public class CountDays extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction()!= null) {
             switch (intent.getAction()) {
-                case Intent.ACTION_BOOT_COMPLETED: // We need to update, as all alarms are cancelled after phone reboot
-                    // fall through
-                case Intent.ACTION_TIMEZONE_CHANGED:  // Self Explanatory
-                case Intent.ACTION_TIME_CHANGED:
-
                 case "com.example.lab4.SCHEDULED_UPDATE":
                     AppWidgetManager manager = AppWidgetManager.getInstance(context);
                     int[] ids = manager.getAppWidgetIds(getComponentName(context));
@@ -49,12 +44,6 @@ public class CountDays extends AppWidgetProvider {
         }
         super.onReceive(context,intent);
     }
-   /* @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            MainActivity.deleteDatePref(context, appWidgetId);
-        }
-    }*/
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
@@ -69,7 +58,7 @@ public class CountDays extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.contentFrame,pendingIntent);
             Calendar calendar = Calendar.getInstance();
             String widgetDate = MainActivity.loadDatePref(context, appWidgetId);
-            long timeInMilliseconds = 0l;
+            long timeInMilliseconds = 0;
             if (!widgetDate.equals("")) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                 try {
@@ -84,7 +73,7 @@ public class CountDays extends AppWidgetProvider {
                 views.setTextViewText(R.id.counterTv, String.valueOf(Math.max(0, daysLeftCeil)));
                 if (daysLeftCeil == 0) {
                     scheduleAlarm(context, appWidgetId);
-                    views.setTextViewText(R.id.counterTv, "0");
+                    views.setTextViewText(R.id.counterTv, "  0");
                 } else if (diffInDays > 0) {
                     // Adjust counter text font size according to value
                     if (diffInDays < 100) {
@@ -99,15 +88,6 @@ public class CountDays extends AppWidgetProvider {
                 }
             }
         appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
-    private static void scheduleNextUpdate(Context context, int appWidgetId) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, CountDays.class).setAction("com.example.lab4.SCHEDULED_UPDATE");
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        long midnightTime = getTimeTillHour(0) + DAY_OF_MONTH;
-        alarmManager.cancel(pendingIntent);
-        alarmManager.set(AlarmManager.RTC, midnightTime, pendingIntent);
     }
     private static void scheduleAlarm(Context context, int appWidgetId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

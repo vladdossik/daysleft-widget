@@ -28,8 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:visibility="gone"
-
-        android:text="Date must be in the future."
         android:textColor="@android:color/holo_red_light"/>
 
     <Button
@@ -37,6 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Apply" />
+        android:text="Сохранить" />
 
 </LinearLayout>

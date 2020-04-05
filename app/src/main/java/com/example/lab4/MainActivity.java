@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Configure Widget");
+       // setTitle("Configure Widget");
         // извлекаем ID конфигурируемого виджета
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
                     errorTv.setText("Событие должно быть в будущем!");
                     errorTv.setVisibility(View.VISIBLE);
-                } else {
+                }
+                else {
                     final Context context = MainActivity.this;
 
                     // When the button is clicked, store the string locally
@@ -127,11 +128,7 @@ public class MainActivity extends AppCompatActivity {
         prefs.putString("appwidget" + appWidgetId, text);
         prefs.apply();
     }
-  /*  static void deleteDatePref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences("com.example.lab4.CountdownW", 0).edit();
-        prefs.remove("appwidget" + appWidgetId);
-        prefs.apply();
-    }*/
+
     static String loadDatePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences("com.example.lab4.CountdownW", 0);
         String titleValue = prefs.getString("appwidget" + appWidgetId, null);

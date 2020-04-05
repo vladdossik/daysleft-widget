@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="140dp"
-    android:layout_height="140dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="140dp">
 
     <FrameLayout
         android:id="@+id/contentFrame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#CCCCCC"
-        android:padding="3dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/dayTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
-            android:text="Days"
+            android:text="Дней"
             android:textAlignment="center"
             android:textColor="#66FFFF"
-            android:textSize="25sp"/>
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/counterTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_marginBottom="-14dp"
             android:paddingBottom="0dp"
-            android:layout_gravity="bottom"
-            android:text="11"
+            android:text="  11"
             android:textColor="#66FFFF"
             android:textSize="95sp" />
 
